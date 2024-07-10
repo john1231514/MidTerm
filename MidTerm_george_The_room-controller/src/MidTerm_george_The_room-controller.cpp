@@ -42,6 +42,10 @@ const int LEDPIN = D3;
 const int MYWEMO=3;
 const int MYWEMO2=0;
 
+const int BULB4=4;
+const int BULB3=3;
+int color;
+
 // Run the application and system concurrently in separate threads
 //SYSTEM_THREAD(ENABLED);
 
@@ -113,23 +117,30 @@ digitalWrite(LEDPIN, HIGH);
 if((currentTime-last1000millisSec)>1000) {
     last1000millisSec = millis();
   if(tempF > 80 ) {
-    Serial.printf("Turning on Wemo# %i\n",MYWEMO);
-      wemoWrite(MYWEMO,HIGH);
+    Serial.printf("Turning on Wemo# %i\n Turn Hue 4 Red %i\n",MYWEMO, BULB4);
+      setHue(BULB4,true,HueRed,(255),255);
+        wemoWrite(MYWEMO,HIGH);
     }
   else{
-    Serial.printf("Turning off Wemo# %i\n",MYWEMO);
-      wemoWrite(MYWEMO,LOW);
+    Serial.printf("Turning off Wemo# %i\n Turn Hue 4 off %i\n",MYWEMO, BULB4);
+      setHue(BULB4,false,HueRed,(255),255);
+        wemoWrite(MYWEMO,LOW);
     }
 
     if(tempF < 80 ) {
-    Serial.printf("Turning on Wemo2# %i\n",MYWEMO2);
+    Serial.printf("Turning on Wemo2# %i\n Turn Hue 3 Blue %i\n",MYWEMO2, BULB3);
+      setHue(BULB3,true,HueBlue,(255),255);
       wemoWrite(MYWEMO2,HIGH);
     }
   else{
-    Serial.printf("Turning off Wemo2# %i\n",MYWEMO2);
-      wemoWrite(MYWEMO2,LOW);
+    Serial.printf("Turning off Wemo2# %i\n Turn Hue 3 off %i\n",MYWEMO2, BULB3);
+      setHue(BULB3,false,HueBlue,(255),255);
+        wemoWrite(MYWEMO2,LOW);
     }
-}
+
+  }
+
+
 
   display.setTextSize(1);
   display.setTextColor(WHITE);

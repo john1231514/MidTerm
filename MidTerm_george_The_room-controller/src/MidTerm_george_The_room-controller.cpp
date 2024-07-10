@@ -78,4 +78,6 @@ void loop() {
   display.printf("tempF %0.2f\n,humidRH %0.2f\n",tempF,humidRH);
   display.display();
   display.clearDisplay();
+
+  
 }

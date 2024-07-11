@@ -57,6 +57,8 @@ const int NEOPIXEL_COUNT = 12;
 Adafruit_NeoPixel pixel(NEOPIXEL_COUNT,SPI1,WS2812B);
 int position;
 int pp;
+int pEncp;
+int EncPosition;
 int neoLight;
 void pixelFill(int color, int startp, int endp);
 int manualState;
@@ -109,7 +111,7 @@ void setup() {
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.printf("tempF %0.2f\n,humidity %0.2f\n neoLight%0.2f\n",tempF,humidity,neoLight);
+  display.printf("tempF %0.2f\n,humidity %0.2f\n neoLight%i\n",tempF,humidity,neoLight);
   display.display();
   display.clearDisplay();
 
@@ -193,18 +195,37 @@ humidity = bme.readHumidity();
   //this is pixelfill which is the function we saw earlier, it's used to tell the pixels what color to be and which one to start at and where the end point is.
   pixelFill(blue,0,neoLight);
 
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
-  display.setCursor(0,0);
-  display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------",tempF,humidity,neoLight);
-  display.display();
-  display.clearDisplay();
-
   if(EncoderButton.isPressed()){
-    manualState =!manualState;
+    manualState = !manualState;
+    Serial.printf("button pressed");
   }
   if(manualState) {
-    
+    Serial.printf("manualmode enabled");
+
+   position = myEnc.read();
+     if(position != pp) {
+       display.setTextSize(1);
+       display.setTextColor(WHITE);
+       display.setCursor(0,0);
+       display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------",tempF,humidity,neoLight);
+       display.display();
+       display.clearDisplay();
+
+       Serial.printf("Position=%i\n", position);
+
+       pp=position;
+     }
+
+     if (position > 95) {
+     position=95;
+     myEnc.write(95);
+     }
+   
+     if (position < 0) {
+         position=0;
+         myEnc.write(0);
+     }
+
   
   }
   else{
@@ -249,7 +270,7 @@ if((currentTime-last1000millisSec)>1000) {
 
   }
 
-humidity = bme.readHumidity();
+   humidity = bme.readHumidity();
 
     if(humidity != phumidity){
 
@@ -272,7 +293,7 @@ humidity = bme.readHumidity();
   display.clearDisplay();
   }
 
-  position = myEnc.read();
+      position = myEnc.read();
 
     if(position != pp){
 

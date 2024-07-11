@@ -43,7 +43,8 @@ int last5Seconds;
 const int OLED_RESET=-1;
 Adafruit_SSD1306 display(OLED_RESET);
 
-const int LEDPIN = D4;
+const int LEDPIN1 = D4;
+const int LEDPIN2 = D3;
 
 const int MYWEMO=3;
 const int MYWEMO2=0;
@@ -62,9 +63,6 @@ int EncPosition;
 int neoLight;
 void pixelFill(int color, int startp, int endp);
 int manualState;
-
-// Run the application and system concurrently in separate threads
-//SYSTEM_THREAD(ENABLED);
 
 //this is where you setup everything as stated in "void.setup".
 void setup() {
@@ -121,9 +119,9 @@ void setup() {
   pixel.setBrightness(255);
 
   // this is telling the photon 2 what pin the encoder LED is connected to and what it does.
-  pinMode(LEDPIN, OUTPUT);
+  pinMode(LEDPIN1, OUTPUT);
 
-
+  pinMode(LEDPIN2, OUTPUT);
 
 }
 
@@ -131,7 +129,7 @@ void setup() {
 void loop() {
 
 //this telling the LED in the encoder to turn on throw what pin and how to turn on low and high put out different colors.
-digitalWrite(LEDPIN, LOW);
+
 
 
   // this is a timer for code that reads the BME which gives back temp,humidity,atmospheric pressure and converts it to units that most understand.  
@@ -203,13 +201,14 @@ humidity = bme.readHumidity();
   //this is anothor if statement that tells the photon 2 what manual mode is.
   if(manualState) {
     Serial.printf("manualmode enabled");
-
+    digitalWrite(LEDPIN1, HIGH);
+    digitalWrite(LEDPIN2, LOW);
    position = myEnc.read();
      if(position != pp) {
        display.setTextSize(1);
        display.setTextColor(WHITE);
        display.setCursor(0,0);
-       display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------",tempF,humidity,neoLight);
+       display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------\nMME%i",tempF,humidity,neoLight,manualState);
        display.display();
        display.clearDisplay();
 
@@ -231,7 +230,8 @@ humidity = bme.readHumidity();
   
   }
   else{
-    digitalWrite(LEDPIN, LOW);
+    digitalWrite(LEDPIN2, HIGH);
+    digitalWrite(LEDPIN1, LOW);
 
 
 
@@ -290,7 +290,7 @@ if((currentTime-last1000millisSec)>1000) {
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------",tempF,humidity,neoLight);
+  display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------\nMME%i",tempF,humidity,neoLight,manualState);
   display.display();
   display.clearDisplay();
   }
@@ -304,7 +304,7 @@ if((currentTime-last1000millisSec)>1000) {
     display.setTextSize(1);
     display.setTextColor(WHITE);
     display.setCursor(0,0);
-    display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------",tempF,humidity,neoLight);
+    display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------\nMME%i",tempF,humidity,neoLight,manualState);
     display.display();
     display.clearDisplay();
 

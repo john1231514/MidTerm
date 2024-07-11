@@ -147,7 +147,7 @@ digitalWrite(LEDPIN, LOW);
   }
 
 
-//this is another timer which makes it so the code is not sent to the hue at a rate that makes the hue stop responding.
+//this is anothor timer which makes it so the code is not sent to the hue at a rate that makes the hue stop responding.
 //the hue is are the lights.
 if((currentTime-last1000millisSec)>1000) {
     last1000millisSec = millis();
@@ -195,10 +195,12 @@ humidity = bme.readHumidity();
   //this is pixelfill which is the function we saw earlier, it's used to tell the pixels what color to be and which one to start at and where the end point is.
   pixelFill(blue,0,neoLight);
 
+  //this is an if statement to say when the botton iss pressed go into manual mode
   if(EncoderButton.isPressed()){
     manualState = !manualState;
     Serial.printf("button pressed");
   }
+  //this is anothor if statement that tells the photon 2 what manual mode is.
   if(manualState) {
     Serial.printf("manualmode enabled");
 

@@ -19,6 +19,8 @@ SYSTEM_MODE(MANUAL);
 
 Button EncoderButton(D5);
 
+Encoder myEnc(D8,D9);
+
 Adafruit_BME280 bme ;
 bool status;
 float tempC;
@@ -38,7 +40,7 @@ int last5Seconds;
 const int OLED_RESET=-1;
 Adafruit_SSD1306 display(OLED_RESET);
 
-const int LEDPIN = D3;
+const int LEDPIN = D4;
 
 const int MYWEMO=3;
 const int MYWEMO2=0;
@@ -100,6 +102,10 @@ void setup() {
   display.display();
   display.clearDisplay();
 
+  pixel.begin();
+  pixel.show();
+  pixel.setBrightness(255);
+
   pinMode(LEDPIN, OUTPUT);
 
 
@@ -109,7 +115,7 @@ void setup() {
 
 void loop() {
 
-digitalWrite(LEDPIN, HIGH);
+digitalWrite(LEDPIN, LOW);
 
 
 
@@ -156,23 +162,23 @@ humidity = bme.readHumidity();
 
     Serial.printf("humidity=%0.2f\n neoLight%i\n",humidity, neoLight);
 
-    neoLight = 0.15*humidity;
+    neoLight = 0.12*humidity;
 
 
    phumidity=humidity;
 
     }
 
-  pixelFill(green,0,neoLight);
+  pixelFill(blue,0,neoLight);
 
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.printf("---\ntempF %0.2f\n---\nhumidity %0.2f\n---\nneoLight%i\n",tempF,humidity,neoLight);
+  display.printf("----------------\ntempF:%0.2f\n----------------\nhumidity:%0.2f\n----------------\nneoLight:%i\n----------------",tempF,humidity,neoLight);
   display.display();
   display.clearDisplay();
 
-
+  pixel.clear();
 
 }
 
@@ -181,6 +187,5 @@ void pixelFill(int color, int startp, int endp) {
   for(i = startp; i < endp; i++) {
     pixel.setPixelColor(i, color);
     pixel.show();
-    pixel.clear();
   }
 }

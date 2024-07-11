@@ -96,7 +96,7 @@ void setup() {
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.printf("tempF %0.2f\n,humidity %0.2f\n",tempF,humidity);
+  display.printf("tempF %0.2f\n,humidity %0.2f\n neoLight%0.2f\n",tempF,humidity,neoLight);
   display.display();
   display.clearDisplay();
 
@@ -154,10 +154,12 @@ humidity = bme.readHumidity();
 
     if(humidity != phumidity){
 
-    Serial.printf("position=%i\n", humidity);
+    Serial.printf("humidity=%0.2f\n neoLight%i\n",humidity, neoLight);
 
     neoLight = 0.15*humidity;
 
+
+   phumidity=humidity;
 
     }
 
@@ -166,7 +168,7 @@ humidity = bme.readHumidity();
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,0);
-  display.printf("---\ntempF %0.2f\n---\nhumidity %0.2f\n---",tempF,humidity);
+  display.printf("---\ntempF %0.2f\n---\nhumidity %0.2f\n---\nneoLight%i\n",tempF,humidity,neoLight);
   display.display();
   display.clearDisplay();
 
@@ -174,3 +176,11 @@ humidity = bme.readHumidity();
 
 }
 
+void pixelFill(int color, int startp, int endp) {
+  int i;
+  for(i = startp; i < endp; i++) {
+    pixel.setPixelColor(i, color);
+    pixel.show();
+    pixel.clear();
+  }
+}

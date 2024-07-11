@@ -24,6 +24,7 @@ bool status;
 float tempC;
 float pressPA;
 float humidity;
+float phumidity;
 float inHg;
 float tempF;
 int currentTime;
@@ -45,6 +46,15 @@ const int MYWEMO2=0;
 const int BULB4=4;
 const int BULB3=3;
 int color;
+
+const int NEOPIXEL_COUNT = 12;
+
+Adafruit_NeoPixel pixel(NEOPIXEL_COUNT,SPI1,WS2812B);
+int position;
+int pp;
+int neoLight;
+void pixelFill(int color, int startp, int endp);
+
 
 // Run the application and system concurrently in separate threads
 //SYSTEM_THREAD(ENABLED);
@@ -140,7 +150,18 @@ if((currentTime-last1000millisSec)>1000) {
 
   }
 
+humidity = bme.readHumidity();
 
+    if(humidity != phumidity){
+
+    Serial.printf("position=%i\n", humidity);
+
+    neoLight = 0.15*humidity;
+
+
+    }
+
+  pixelFill(green,0,neoLight);
 
   display.setTextSize(1);
   display.setTextColor(WHITE);
